@@ -8,13 +8,17 @@ selections_bp = Blueprint("selections", __name__)
 @selections_bp.post("")
 def save_selection():
     payload = request.get_json(silent=True) or {}
-    code = payload.get("code")
+    code = (payload.get("code") or "").strip()
+    normalized = code.lower()
     photo_ids = payload.get("photoIds")
 
     if not code or not isinstance(photo_ids, list):
         return jsonify({"message": "需要提供交付码和选片列表"}), 400
 
-    delivery = next((item for item in DELIVERIES if item["code"] == code), None)
+    delivery = next(
+        (item for item in DELIVERIES if item["code"].strip().lower() == normalized),
+        None,
+    )
     if delivery is None:
         return jsonify({"message": "交付链接不存在"}), 404
 

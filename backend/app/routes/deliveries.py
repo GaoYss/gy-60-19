@@ -25,7 +25,11 @@ def list_deliveries():
 
 @deliveries_bp.get("/<code>")
 def get_delivery(code):
-    delivery = next((item for item in DELIVERIES if item["code"] == code), None)
+    normalized = code.strip().lower()
+    delivery = next(
+        (item for item in DELIVERIES if item["code"].strip().lower() == normalized),
+        None,
+    )
     if delivery is None:
         return jsonify({"message": "交付链接不存在"}), 404
     return jsonify(delivery)

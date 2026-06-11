@@ -15,7 +15,7 @@ export function DeliveryWorkspace({ deliveries, onDeliveriesChange }) {
     setMessage("");
 
     try {
-      const data = await getDelivery(code);
+      const data = await getDelivery(code.trim());
       setDelivery(data);
       setSelectedIds(data.photos.filter((photo) => photo.selected).map((photo) => photo.id));
     } catch (error) {
